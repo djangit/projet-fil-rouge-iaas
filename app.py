@@ -46,7 +46,7 @@ def upload_file():
             file_tmp = file_tmp.decode("utf8")
             #metadata_txt['file name']=file_name[0]
             fileMetadata['name']=file.filename
-            fileMetadata['size']=len(file.read())
+            fileMetadata['size']=len(file.tmp)
             fileMetadata['type']=file.content_type            
             output['File Data']= file_tmp
             output['File MetaData'] = fileMetadata
@@ -65,7 +65,7 @@ def upload_file():
             encoded_string = base64.b64encode(file.read())
             encoded_string = encoded_string.decode('utf-8')
             fileMetadata['name']=file.filename
-            fileMetadata['size']=len(file.read())
+            fileMetadata['size']=len(encoded_string)
             fileMetadata['type']=file.content_type  
             output['File data']=encoded_string
             output['File Metadata']=fileMetadata

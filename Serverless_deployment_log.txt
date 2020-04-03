@@ -1,0 +1,101 @@
+Déploiement : 
+
+J’ai fait une première tentative d’installation avec Zappa qui s’est soldé par un échec. Je me suis alors rabattu sur serverless. 
+1.	Création d’un bucket s3
+2.	Installation du framework serverless (https://www.osradar.com/install-nodejs-freebsd-12/ & fiche TD cours )
+$ sudo pkg install awscli
+$ sudo pkg install node
+$ sudo pkg install npm
+$ sudo npm install serverless -g
+$ aws configure
+AWS Access Key ID [****************BQOU]: clé sur rosettaHub
+AWS Secret Access Key [****************CKYk]: clé sur rosettaHub
+Default region name [None]:
+Default output format [None]:
+
+3.	Création de l’environnement virtuel 
+$ pwd
+/home/ec2-user/sio/serv
+$ python -m venv venv
+4.	Transfer de mon script python : app.py et requirements.txt
+(venv) $ pip3 install -r requirements.txt
+5.	Installation serverless 
+J’ai suivi pas-à-pas le tutoriel du site suivant pour installation : https://serverless.com/blog/flask-python-rest-api-serverless-lambda-dynamodb/
+
+(venv) $ vi serverless.yml
+service: serverless-flask-api
+
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: app.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: false
+
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: "arn:aws:s3:::bucket-projet-fil-rouge/*"
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - http:
+          path: toto
+          method: POST
+
+
+(venv) $ npm init -f
+
+(venv) $ npm install --save-dev serverless-wsgi serverless-python-requirements
+(venv) $ sls plugin install -n serverless-wsgi
+Serverless: Installing plugin "serverless-wsgi@latest" (this might take a few seconds...)
+Serverless: Successfully installed "serverless-wsgi@latest"
+ (venv) $ sls plugin install -n serverless-python-requirements
+Serverless: Installing plugin "serverless-python-requirements@latest" (this might take a few seconds...)
+Serverless: Successfully installed "serverless-python-requirements@latest"
+(venv) $ sls deploy
+Serverless: Generated requirements from /usr/home/ec2-user/sio/serv/requirements.txt in /usr/home/ec2-user/sio/serv/.serverless/requirements.txt...
+Serverless: Installing requirements from /home/ec2-user/.cache/serverless-python-requirements/2e7e5aab26ee17b6fb48d717e1175c78f8c615ffa6bd56d1f56d342833ee7fb8_slspyc/requirements.txt ...
+Serverless: Using download cache directory /home/ec2-user/.cache/serverless-python-requirements/downloadCacheslspyc
+Serverless: Running ...
+Serverless: Using Python specified in "runtime": python3.7
+Serverless: Packaging Python WSGI handler...
+Serverless: Packaging service...
+Serverless: Excluding development dependencies...
+Serverless: Injecting required Python packages to package...
+Serverless: Uploading CloudFormation file to S3...
+Serverless: Uploading artifacts...
+Serverless: Uploading service app.zip file to S3 (57.53 MB)...
+Serverless: Validating template...
+Serverless: Updating Stack...
+Serverless: Checking Stack update progress...
+..............
+Serverless: Stack update finished...
+Service Information
+service: serverless-flask
+stage: dev
+region: eu-west-1
+stack: serverless-flask-dev
+resources: 11
+api keys:
+  None
+endpoints:
+  POST - https://27gckgi4wk.execute-api.eu-west-1.amazonaws.com/dev/toto
+functions:
+  app: serverless-flask-dev-app
+layers:
+  None
+Serverless: Removing old service artifacts from S3...
+Serverless: Run the "serverless" command to setup monitoring, troubleshooting and testing.

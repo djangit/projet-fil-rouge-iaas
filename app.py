@@ -3,14 +3,14 @@ from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 import csv
 import boto3, logging
-from botocore.exceptions import ClientError
-#from flask_oauth import OAuth
+from io import BytesIO
 
 UPLOAD_FOLDER = '/home/lpirbay/Documents/pfr'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'}
 s3 = boto3.client('s3')
-#s3 = boto3.resource('s3')
-#bucket = s3.Bucket('bucket-projet-fil-rouge')
+bucket = 'bucket-projet-fil-rouge'
+
+
 
 app = Flask(__name__)
 
@@ -46,18 +46,12 @@ def upload_file():
             file_tmp = file_tmp.decode("utf8")
             #metadata_txt['file name']=file_name[0]
             fileMetadata['name']=file.filename
-            fileMetadata['size']=len(file.tmp)
+            fileMetadata['size']=len(file_tmp)
             fileMetadata['type']=file.content_type            
             output['File Data']= file_tmp
             output['File MetaData'] = fileMetadata
-            '''try:
-               response = s3_client.upload_file(file_name, bucket, object_name)
-               response = s3.upload_file(file. 
-            except ClientError as e:
-               logging.error(e)
-               return False
-            return True
-            '''
+            object_name=file_name[0]
+            s3.upload_fileobj(BytesIO(json.dumps(output).encode('utf-8')),bucket, object_name+'.json')
             return jsonify(output),200
 
         elif 'image' in file.content_type: 
@@ -69,6 +63,8 @@ def upload_file():
             fileMetadata['type']=file.content_type  
             output['File data']=encoded_string
             output['File Metadata']=fileMetadata
+            object_name=file_name[0]
+            s3.upload_fileobj(BytesIO(json.dumps(output).encode('utf-8')),bucket, object_name+'.json')
             return jsonify(output),200
 
 

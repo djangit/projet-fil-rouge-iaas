@@ -1,0 +1,34 @@
+FondPizza
+	PateEpaisse
+	PateFineCroustillante
+GarniturePizza
+	GarnitureFromage
+		GarnitureChevre
+		GarnitureMozzarella
+		GarnitureParmesan
+		GarnitureRoquefort
+		GarnitureReblochon
+	GarnitureLegume
+		GarnitureAil
+		GarnitureCapre
+		GarnitureChampignon
+		GarnitureOignon
+		GarnitureOlive
+		GarniturePoivron
+			GarniturePoivronVert
+			GarniturePoivronRouge
+			GarniturePimentJalapeno
+		GarnitureRoquette
+		GarnitureTomate
+	GarnitureProduitMer
+		GarnitureAnchois
+		GarnitureCrevette
+		GarnitureThon
+	GarnitureViande
+		GarnitureBoeufEpice
+		GarnitureJambon
+		GarniturePepperoni
+		GarnitureSalami
+Pizza
+	PizzaAppelation
+		PizzaMargherita

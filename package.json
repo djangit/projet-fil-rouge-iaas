@@ -13,5 +13,13 @@
     "serverless-wsgi": "^1.7.4"
   },
   "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djangit/projet-fil-rouge-iaas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/djangit/projet-fil-rouge-iaas/issues"
+  },
+  "homepage": "https://github.com/djangit/projet-fil-rouge-iaas#readme",
   "description": ""
 }
